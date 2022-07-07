@@ -1,7 +1,8 @@
 <?php 
 require __DIR__ . '/vendor/autoload.php';
-
-$db = new \PDO('mysql:dbname=my-database;host=localhost;charset=utf8mb4', 'my-username', 'my-password');
+//$my-username = "root";
+//$my-password = "";
+$db = new \PDO('mysql:dbname=percy;host=localhost;charset=utf8mb4', 'root', '');
 // or
 // $db = new \PDO('pgsql:dbname=my-database;host=localhost;port=5432', 'my-username', 'my-password');
 // or

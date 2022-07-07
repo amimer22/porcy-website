@@ -1,13 +1,36 @@
 <?php 
-try {
-  $userId = $auth->register($_POST['email-register'], $_POST['psw-register'], $_POST['pswC-register'], function ($selector, $token) {
+/*try {
+  /*$userId = $auth->register($_POST['email-register'], $_POST['psw-register'], $_POST['pswC-register'],function ($selector, $token) {
       echo 'Send ' . $selector . ' and ' . $token . ' to the user (e.g. via email)';
       echo '  For emails, consider using the mail(...) function, Symfony Mailer, Swiftmailer, PHPMailer, etc.';
       echo '  For SMS, consider using a third-party service and a compatible SDK';
   });
 
-  echo 'We have signed up a new user with the ID ' . $userId;
+  //echo 'We have signed up a new user with the ID ' . $userId;
+}*/
+try {
+  if (isset($_POST['email-register']) && isset($_POST["psw-register"]) && isset($_POST["pswC-register"])) {
+      //$email = $_POST["email-register"];
+      $password = $_POST["psw-register"];
+      $cpass = $_POST["pswC-register"];
+      
+      /*if(isset($_POST["email-register"])){
+        $emailregister = $_POST["email-register"];
+      }else{
+        $emailregister = null;
+      }*/
+
+      if($password === ""){
+        echo "password must not be empty";
+      }else if ($password !== $cpass) {
+        echo "password dont match";
+      }else{
+        $userId = $auth->register($email, $password, $username);
+        echo 'We have signed up a new user with the ID ' . $userId;
+      }
+  }
 }
+  
 catch (\Delight\Auth\InvalidEmailException $e) {
   die('Invalid email address');
 }
@@ -105,7 +128,7 @@ catch (\Delight\Auth\TooManyRequestsException $e) {
                       </div>    
                       <br>        
                       <!-- Submit button -->
-                      <button type="button" class="btn btn-primary btn-block mb-4">Sign in</button>
+                      <input type="submit" class="btn btn-primary btn-block mb-4"/>
                       
                     </form>
         
