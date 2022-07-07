@@ -8,9 +8,10 @@
 
   //echo 'We have signed up a new user with the ID ' . $userId;
 }*/
+include("index.php");
 try {
   if (isset($_POST['email-register']) && isset($_POST["psw-register"]) && isset($_POST["pswC-register"])) {
-      //$email = $_POST["email-register"];
+      $email = $_POST["email-register"];
       $password = $_POST["psw-register"];
       $cpass = $_POST["pswC-register"];
       
@@ -25,7 +26,7 @@ try {
       }else if ($password !== $cpass) {
         echo "password dont match";
       }else{
-        $userId = $auth->register($email, $password, $username);
+        $userId = $auth->register($email, $password);
         echo 'We have signed up a new user with the ID ' . $userId;
       }
   }
@@ -105,7 +106,7 @@ catch (\Delight\Auth\TooManyRequestsException $e) {
                 <div class="col-lg-8">
                 <div class="card-body py-5 px-md-5">
         
-                    <form>
+                    <form action="" method="POST">
                       <!-- Email input -->
                       <div class="form-outline mb-4">
                           <input type="email" id="email-register" class="form-control" name="email-register" />
