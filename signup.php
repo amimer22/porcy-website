@@ -9,41 +9,60 @@
   //echo 'We have signed up a new user with the ID ' . $userId;
 }*/
 include("index.php");
-try {
+
   if (isset($_POST['email-register']) && isset($_POST["psw-register"]) && isset($_POST["pswC-register"])) {
       $email = $_POST["email-register"];
       $password = $_POST["psw-register"];
       $cpass = $_POST["pswC-register"];
       
-      /*if(isset($_POST["email-register"])){
-        $emailregister = $_POST["email-register"];
-      }else{
-        $emailregister = null;
-      }*/
-
+      //make sure password is not empty
       if($password === ""){
         echo "password must not be empty";
-      }else if ($password !== $cpass) {
-        echo "password dont match";
-      }else{
-        $userId = $auth->register($email, $password);
-        echo 'We have signed up a new user with the ID ' . $userId;
       }
-  }
-}
+      //make sure password is the same as password confirm
+      else if ($password !== $cpass) {
+        echo "password dont match";
+      }
+      
   
-catch (\Delight\Auth\InvalidEmailException $e) {
-  die('Invalid email address');
-}
-catch (\Delight\Auth\InvalidPasswordException $e) {
-  die('Invalid password');
-}
-catch (\Delight\Auth\UserAlreadyExistsException $e) {
-  die('User already exists');
-}
-catch (\Delight\Auth\TooManyRequestsException $e) {
-  die('Too many requests');
-}
+    else{ 
+        
+        try {
+          //$userId = $auth->register($email, $password);
+          
+          $userId = $auth->register($email, $password,null, function ($selector, $token) {
+            //$url = 'https://www.example.com/verify_email?selector=' . \urlencode($selector) . '&token=' . \urlencode($token);
+            //
+            $target= $_POST["email-register"];
+            $to = $target;
+            $subject = "percy Email Verification";
+            $message = "confirm your email: \n
+            http://localhost/porcy/emailConfirmation.php?selector=" . $selector . "&token=" . $token;
+            $headers = 'From: eshopdz84@gmail.com' . "\r\n"; 
+            // send the verification email to the user
+            mail($to, $subject, $message, $headers);
+            //
+            echo 'Send ' . $selector . ' and ' . $token . ' to the user (e.g. via email)';
+            //echo '  For emails, consider using the mail(...) function, Symfony Mailer, Swiftmailer, PHPMailer, etc.';
+            //echo '  For SMS, consider using a third-party service and a compatible SDK';
+          });
+          echo 'We have signed up a new user with the ID ' . $userId;
+        }
+        catch (\Delight\Auth\InvalidEmailException $e) {
+          die('Invalid email address');
+        }
+        catch (\Delight\Auth\InvalidPasswordException $e) {
+          die('Invalid password');
+        }
+        catch (\Delight\Auth\UserAlreadyExistsException $e) {
+          die('User already exists');
+        }
+        catch (\Delight\Auth\TooManyRequestsException $e) {
+          die('Too many requests');
+        }
+    }
+  }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
